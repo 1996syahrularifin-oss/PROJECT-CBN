@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBN Fiber Cianjur - Syahrul Arifin</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="favicon.jpg">
+    
+    <!-- Google Fonts: Roboto (Standar Keterbacaan Tinggi & Sharp) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                    },
+                    colors: {
+                        corporate: {
+                            blue: '#0056b3',
+                            dark: '#000000',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Mode Hitam Pekat & Sudut Tajam */
+        * {
+            border-radius: 0 !important; /* Memaksa sudut serba tajam / kotak */
+        }
+        
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        body.dark {
+            background-color: #000000 !important; /* Hitam Pekat */
+            color: #f3f4f6 !important;
+        }
+
+        /* Custom Scrollbar untuk Slider */
+        .slider-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #0056b3 #e2e8f0;
+        }
+        .dark .slider-scroll {
+            scrollbar-color: #0056b3 #1a1a1a;
+        }
+        .slider-scroll::-webkit-scrollbar {
+            height: 6px;
+        }
+        .slider-scroll::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        .dark .slider-scroll::-webkit-scrollbar-track {
+            background: #111111;
+        }
+        .slider-scroll::-webkit-scrollbar-thumb {
+            background-color: #0056b3;
+        }
+
+        /* Styling Dropdown Tajam Modern */
+        select.modern-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em 1.2em;
+        }
+        .dark select.modern-select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23e2e8f0'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-color: #0a0a0a;
+            color: #ffffff;
+            border-color: #262626;
+        }
+    </style>
+</head>
+<body class="antialiased font-sans flex flex-col min-h-screen">
+
+    <!-- TOP BAR (Call Center, Translate & Dark Mode Toggle) -->
+    <div class="w-full bg-white dark:bg-black border-b border-slate-200 dark:border-neutral-800 transition-colors sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between md:justify-end items-center gap-3 md:gap-4 text-xs font-bold tracking-wider">
+            
+            <!-- Call Center 1500780 -->
+            <div class="flex items-center gap-1.5 text-corporate-blue dark:text-blue-400 font-extrabold uppercase tracking-wide">
+                <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                <span>CALL CENTER 1500780</span>
+            </div>
+
+            <div class="w-px h-4 bg-slate-300 dark:bg-neutral-800"></div>
+
+            <!-- Translate Buttons -->
+            <div class="flex items-center gap-2">
+                <button id="btn-lang-id" onclick="switchLanguage('id')" class="w-7 h-5 border border-slate-300 dark:border-neutral-600 hover:opacity-100 transition-opacity ring-2 ring-corporate-blue" title="Bahasa Indonesia">
+                    <img src="https://flagcdn.com/id.svg" alt="Indonesia" class="w-full h-full object-cover">
+                </button>
+                <div class="w-px h-4 bg-slate-300 dark:bg-neutral-700"></div>
+                <button id="btn-lang-en" onclick="switchLanguage('en')" class="w-7 h-5 border border-slate-300 dark:border-neutral-600 opacity-40 hover:opacity-100 transition-opacity" title="English">
+                    <img src="https://flagcdn.com/us.svg" alt="United States" class="w-full h-full object-cover">
+                </button>
+            </div>
+
+            <!-- Divider -->
+            <div class="w-px h-5 bg-slate-300 dark:bg-neutral-800"></div>
+
+            <!-- Dark/Light Mode Toggle -->
+            <button id="themeToggle" class="p-1.5 border border-slate-200 dark:border-neutral-800 hover:border-slate-400 dark:hover:border-neutral-600 text-slate-700 dark:text-neutral-200 transition-all bg-slate-100 dark:bg-neutral-900" title="Toggle Tema">
+                <!-- Sun Icon -->
+                <svg id="iconSun" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <!-- Moon Icon -->
+                <svg id="iconMoon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="w-full bg-white dark:bg-black pt-8 pb-10 transition-colors border-b border-slate-200 dark:border-neutral-800">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            
+            <!-- Judul Utama -->
+            <h1 data-i18n="mainTitle" class="text-xl md:text-3xl font-bold text-slate-800 dark:text-white tracking-widest uppercase mb-6">
+                Pusat Pemasangan Internet Area Cianjur
+            </h1>
+            
+            <!-- Logo CBN -->
+            <img src="logo.jpg" alt="Logo CBN" class="h-20 md:h-28 w-auto object-contain mx-auto mb-8" onerror="this.src='https://placehold.co/300x120/0056b3/ffffff?text=LOGO+CBN'">
+            
+            <!-- Nama & Sub-Label -->
+            <div class="relative inline-block mt-2 mb-8">
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight">
+                    SYAHRUL ARIFIN
+                </h2>
+                <div class="absolute -bottom-5 right-0 bg-corporate-blue text-white text-xs font-bold px-3 py-1 uppercase tracking-wide">
+                    CBN fiber Cianjur
+                </div>
+            </div>
+            
+            <!-- Subtitle Keunggulan -->
+            <div class="mt-8 border-t border-b border-slate-200 dark:border-neutral-800 py-4">
+                <p data-i18n="subFeatures" class="text-sm md:text-base text-slate-700 dark:text-neutral-300 font-semibold max-w-3xl mx-auto uppercase tracking-wide">
+                    WIFI Tercepat &bull; Harga Termurah &bull; Download & Upload Simetris 1:1 &bull; Support Dual Band 4G & 5G
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO IMAGE FULL WIDTH -->
+    <section class="w-full bg-slate-200 dark:bg-neutral-900 border-b border-slate-300 dark:border-neutral-800">
+        <img src="prime.jpg" alt="Promo Utama CBN" class="w-full h-auto object-cover max-h-[500px]" onerror="this.src='https://placehold.co/1920x600/000000/ffffff?text=Gambar+Utama+Full+Width+(prime.jpg)'">
+    </section>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow w-full max-w-7xl mx-auto pb-20">
+        
+        <!-- PILIHAN LAYANAN INTERNET -->
+        <section class="mt-16" id="layanan">
+            <div class="px-4 md:px-8 mb-8 border-l-4 border-corporate-blue pl-4">
+                <h3 data-i18n="packageHeading" class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white uppercase tracking-wider">Pilihan Layanan Internet CBN</h3>
+            </div>
+
+            <!-- Slider Container (Clean, Smooth & Automatic) -->
+            <div id="packageSlider" class="slider-scroll flex overflow-x-auto snap-x snap-mandatory pb-6 px-4 md:px-8 gap-6" style="-webkit-overflow-scrolling: touch;">
+                
+                <!-- Paket 1: Fiber 20 -->
+                <div class="snap-start shrink-0 w-[280px] md:w-[300px] bg-white dark:bg-neutral-900 p-8 border border-slate-300 dark:border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <div data-i18n="tagInternetOnly" class="text-slate-500 dark:text-neutral-400 text-xs font-bold mb-2 uppercase tracking-widest">Internet Only</div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white mb-6">Fiber 20</div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-black text-corporate-blue">40</span>
+                            <span class="text-slate-600 dark:text-neutral-400 font-bold">Mbps</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-200 dark:border-neutral-800 pt-4">
+                        <div data-i18n="lblMonthly" class="text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Biaya per bulan</div>
+                        <div class="text-xl font-bold text-slate-900 dark:text-white">Rp 193.140</div>
+                    </div>
+                </div>
+
+                <!-- Paket 2: Fiber 20 + DramaFlix (NEW) -->
+                <div class="snap-start shrink-0 w-[280px] md:w-[300px] bg-slate-900 dark:bg-neutral-900 p-8 border-2 border-corporate-blue flex flex-col justify-between relative">
+                    <div class="absolute top-0 left-0 bg-corporate-blue text-white text-xs font-bold px-3 py-1 uppercase tracking-widest">
+                        New
+                    </div>
+                    <div>
+                        <div data-i18n="tagEntertainment" class="text-blue-400 text-xs font-bold mb-2 mt-4 uppercase tracking-widest">Paket Hiburan</div>
+                        <div class="text-3xl font-black text-white mb-6 leading-tight">Fiber 20<br>+ DramaFlix</div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-black text-white">90</span>
+                            <span class="text-neutral-300 font-bold">Mbps</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-neutral-700 dark:border-neutral-800 pt-4">
+                        <div data-i18n="lblMonthly" class="text-xs text-neutral-400 uppercase tracking-wider mb-1">Biaya per bulan</div>
+                        <div class="text-xl font-bold text-white">Rp 209.790</div>
+                    </div>
+                </div>
+
+                <!-- Paket 3: Fiber 100 -->
+                <div class="snap-start shrink-0 w-[280px] md:w-[300px] bg-white dark:bg-neutral-900 p-8 border border-slate-300 dark:border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <div data-i18n="tagInternetOnly" class="text-slate-500 dark:text-neutral-400 text-xs font-bold mb-2 uppercase tracking-widest">Internet Only</div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white mb-6">Fiber 100</div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-black text-corporate-blue">200</span>
+                            <span class="text-slate-600 dark:text-neutral-400 font-bold">Mbps</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-200 dark:border-neutral-800 pt-4">
+                        <div data-i18n="lblMonthly" class="text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Biaya per bulan</div>
+                        <div class="text-xl font-bold text-slate-900 dark:text-white">Rp 226.440</div>
+                    </div>
+                </div>
+
+                <!-- Paket 4: Fiber 150 -->
+                <div class="snap-start shrink-0 w-[280px] md:w-[300px] bg-white dark:bg-neutral-900 p-8 border border-slate-300 dark:border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <div data-i18n="tagInternetOnly" class="text-slate-500 dark:text-neutral-400 text-xs font-bold mb-2 uppercase tracking-widest">Internet Only</div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white mb-6">Fiber 150</div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-black text-corporate-blue">300</span>
+                            <span class="text-slate-600 dark:text-neutral-400 font-bold">Mbps</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-200 dark:border-neutral-800 pt-4">
+                        <div data-i18n="lblMonthly" class="text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Biaya per bulan</div>
+                        <div class="text-xl font-bold text-slate-900 dark:text-white">Rp 259.740</div>
+                    </div>
+                </div>
+
+                <!-- Paket 5: Fiber 250 -->
+                <div class="snap-start shrink-0 w-[280px] md:w-[300px] bg-white dark:bg-neutral-900 p-8 border border-slate-300 dark:border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <div data-i18n="tagInternetOnly" class="text-slate-500 dark:text-neutral-400 text-xs font-bold mb-2 uppercase tracking-widest">Internet Only</div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white mb-6">Fiber 250</div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-black text-corporate-blue">400</span>
+                            <span class="text-slate-600 dark:text-neutral-400 font-bold">Mbps</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-200 dark:border-neutral-800 pt-4">
+                        <div data-i18n="lblMonthly" class="text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Biaya per bulan</div>
+                        <div class="text-xl font-bold text-slate-900 dark:text-white">Rp 359.840</div>
+                    </div>
+                </div>
+
+                <!-- Paket 6: Fiber 300 -->
+                <div class="snap-start shrink-0 w-[280px] md:w-[300px] bg-white dark:bg-neutral-900 p-8 border border-slate-300 dark:border-neutral-800 flex flex-col justify-between">
+                    <div>
+                        <div data-i18n="tagInternetOnly" class="text-slate-500 dark:text-neutral-400 text-xs font-bold mb-2 uppercase tracking-widest">Internet Only</div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white mb-6">Fiber 300</div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-5xl font-black text-corporate-blue">500</span>
+                            <span class="text-slate-600 dark:text-neutral-400 font-bold">Mbps</span>
+                        </div>
+                    </div>
+                    <div class="border-t border-slate-200 dark:border-neutral-800 pt-4">
+                        <div data-i18n="lblMonthly" class="text-xs text-slate-500 dark:text-neutral-400 uppercase tracking-wider mb-1">Biaya per bulan</div>
+                        <div class="text-xl font-bold text-slate-900 dark:text-white">Rp 481.740</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- BENEFIT & PROMO SPESIAL -->
+        <section class="mt-12 px-4 md:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- Benefit Utama -->
+                <div class="bg-white dark:bg-neutral-900 p-8 border border-slate-300 dark:border-neutral-800">
+                    <h3 data-i18n="titleBenefits" class="text-xl font-bold text-slate-900 dark:text-white uppercase tracking-wider mb-6 border-b-2 border-corporate-blue inline-block pb-2">
+                        Keuntungan Berlangganan
+                    </h3>
+                    <ul class="space-y-5">
+                        <li class="flex items-center gap-4">
+                            <div class="w-5 h-5 bg-slate-900 dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <span data-i18n="b1" class="text-slate-800 dark:text-neutral-200 font-bold text-sm md:text-base tracking-wide uppercase">Gratis Biaya Pasang</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-5 h-5 bg-slate-900 dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <span data-i18n="b2" class="text-slate-800 dark:text-neutral-200 font-bold text-sm md:text-base tracking-wide uppercase">Harga Sudah Termasuk PPN 11%</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-5 h-5 bg-slate-900 dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <span data-i18n="b3" class="text-slate-800 dark:text-neutral-200 font-bold text-sm md:text-base tracking-wide uppercase">Harga Flat / Tidak Naik</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="w-5 h-5 bg-slate-900 dark:bg-white text-white dark:text-black flex items-center justify-center shrink-0">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <span data-i18n="b4" class="text-slate-800 dark:text-neutral-200 font-bold text-sm md:text-base tracking-wide uppercase">Internet Tanpa FUP / Batas Kuota</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Box Promo Spesial -->
+                <div class="bg-corporate-blue p-8 text-white">
+                    <h3 data-i18n="titlePromo" class="text-xl font-bold uppercase tracking-wider mb-6 border-b-2 border-blue-400 inline-block pb-2">
+                        Promo Spesial
+                    </h3>
+                    <div class="space-y-5">
+                        <div class="border-l-4 border-yellow-400 pl-4 py-1">
+                            <div data-i18n="p1Title" class="font-black text-2xl tracking-widest text-yellow-400">BAYAR 5 BULAN</div>
+                            <div data-i18n="p1Sub" class="font-bold text-base mt-0.5 uppercase tracking-wider">Gratis 1 Bulan</div>
+                        </div>
+                        <div class="border-l-4 border-yellow-400 pl-4 py-1">
+                            <div data-i18n="p2Title" class="font-black text-2xl tracking-widest text-yellow-400">BAYAR 9 BULAN</div>
+                            <div data-i18n="p2Sub" class="font-bold text-base mt-0.5 uppercase tracking-wider">Gratis 3 Bulan</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FORMULIR PENDAFTARAN -->
+        <section class="mt-16 px-4 md:px-8">
+            <div class="max-w-3xl mx-auto bg-white dark:bg-neutral-900 p-8 md:p-12 border-t-4 border-corporate-blue border-x border-b border-slate-200 dark:border-neutral-800">
+                
+                <div class="mb-8 border-b border-slate-200 dark:border-neutral-800 pb-4">
+                    <h3 data-i18n="formTitle" class="text-2xl font-bold text-slate-900 dark:text-white uppercase tracking-wider">Formulir Pemasangan</h3>
+                    <p data-i18n="formSub" class="text-slate-600 dark:text-neutral-400 mt-1 text-sm md:text-base">Lengkapi data pendaftaran di bawah ini. Tim kami akan segera memprosesnya.</p>
+                </div>
+
+                <form id="orderForm" onsubmit="kirimWhatsApp(event)" class="space-y-6">
+                    
+                    <!-- Nama Lengkap -->
+                    <div>
+                        <label data-i18n="lblNama" for="nama" class="block text-xs font-bold text-slate-800 dark:text-neutral-200 uppercase tracking-wider mb-2">Nama Lengkap</label>
+                        <input type="text" id="nama" required placeholder="NAMA SESUAI KTP" 
+                               class="w-full px-4 py-3.5 bg-slate-50 dark:bg-black border border-slate-300 dark:border-neutral-800 focus:outline-none focus:border-corporate-blue dark:focus:border-corporate-blue text-slate-900 dark:text-white uppercase placeholder-slate-400">
+                    </div>
+
+                    <!-- Dropdown Layanan -->
+                    <div>
+                        <label data-i18n="lblLayanan" for="layanan_paket" class="block text-xs font-bold text-slate-800 dark:text-neutral-200 uppercase tracking-wider mb-2">Pilih Layanan</label>
+                        <select id="layanan_paket" required
+                                class="modern-select w-full px-4 py-3.5 bg-slate-50 dark:bg-black border border-slate-300 dark:border-neutral-800 focus:outline-none focus:border-corporate-blue text-slate-900 dark:text-white appearance-none cursor-pointer uppercase">
+                            <option value="" disabled selected data-i18n="optSelectPackage">-- PILIH PAKET INTERNET --</option>
+                            <option value="Fiber 20 (40 Mbps)">FIBER 20 - 40 Mbps (Rp 193.140)</option>
+                            <option value="Fiber 20 + DramaFlix (90 Mbps)">NEW: FIBER 20 + DramaFlix - 90 Mbps (Rp 209.790)</option>
+                            <option value="Fiber 100 (200 Mbps)">FIBER 100 - 200 Mbps (Rp 226.440)</option>
+                            <option value="Fiber 150 (300 Mbps)">FIBER 150 - 300 Mbps (Rp 259.740)</option>
+                            <option value="Fiber 250 (400 Mbps)">FIBER 250 - 400 Mbps (Rp 359.840)</option>
+                            <option value="Fiber 300 (500 Mbps)">FIBER 300 - 500 Mbps (Rp 481.740)</option>
+                        </select>
+                    </div>
+
+                    <!-- Dropdown Kecamatan Cianjur -->
+                    <div>
+                        <label data-i18n="lblKecamatan" for="kecamatan" class="block text-xs font-bold text-slate-800 dark:text-neutral-200 uppercase tracking-wider mb-2">Kecamatan (Area Cianjur)</label>
+                        <select id="kecamatan" required
+                                class="modern-select w-full px-4 py-3.5 bg-slate-50 dark:bg-black border border-slate-300 dark:border-neutral-800 focus:outline-none focus:border-corporate-blue text-slate-900 dark:text-white appearance-none cursor-pointer uppercase">
+                            <option value="" disabled selected data-i18n="optSelectDistrict">-- PILIH WILAYAH KECAMATAN --</option>
+                            <option value="Agrabinta">AGRABINTA</option>
+                            <option value="Bojongpicung">BOJONGPICUNG</option>
+                            <option value="Campaka">CAMPAKA</option>
+                            <option value="Campaka Mulya">CAMPAKA MULYA</option>
+                            <option value="Cianjur">CIANJUR</option>
+                            <option value="Cibeber">CIBEBER</option>
+                            <option value="Cibinong">CIBINONG</option>
+                            <option value="Cidaun">CIDAUN</option>
+                            <option value="Cijati">CIJATI</option>
+                            <option value="Cikadu">CIKADU</option>
+                            <option value="Cikalongkulon">CIKALONGKULON</option>
+                            <option value="Cilaku">CILAKU</option>
+                            <option value="Cipanas">CIPANAS</option>
+                            <option value="Ciranjang">CIRANJANG</option>
+                            <option value="Cugenang">CUGENANG</option>
+                            <option value="Gekbrong">GEKBRONG</option>
+                            <option value="Haurwangi">HAURWANGI</option>
+                            <option value="Kadupandak">KADUPANDAK</option>
+                            <option value="Karangtengah">KARANGTENGAH</option>
+                            <option value="Leles">LELES</option>
+                            <option value="Mande">MANDE</option>
+                            <option value="Naringgul">NARINGGUL</option>
+                            <option value="Pacet">PACET</option>
+                            <option value="Pagelaran">PAGELARAN</option>
+                            <option value="Pasirkuda">PASIRKUDA</option>
+                            <option value="Sindangbarang">SINDANGBARANG</option>
+                            <option value="Sukaluyu">SUKALUYU</option>
+                            <option value="Sukanagara">SUKANAGARA</option>
+                            <option value="Sukaresmi">SUKARESMI</option>
+                            <option value="Takokak">TAKOKAK</option>
+                            <option value="Tanggeung">TANGGEUNG</option>
+                            <option value="Warungkondang">WARUNGKONDANG</option>
+                        </select>
+                    </div>
+
+                    <!-- Alamat Lengkap -->
+                    <div>
+                        <label data-i18n="lblAlamat" for="alamat_lengkap" class="block text-xs font-bold text-slate-800 dark:text-neutral-200 uppercase tracking-wider mb-2">Detail Alamat Pemasangan</label>
+                        <textarea id="alamat_lengkap" required rows="3" placeholder="NAMA JALAN, RT/RW, BLOK/NOMOR RUMAH..."
+                                  class="w-full px-4 py-3.5 bg-slate-50 dark:bg-black border border-slate-300 dark:border-neutral-800 focus:outline-none focus:border-corporate-blue text-slate-900 dark:text-white placeholder-slate-400 resize-none uppercase"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="btnSubmit"
+                            class="w-full mt-4 bg-slate-900 hover:bg-corporate-blue dark:bg-corporate-blue dark:hover:bg-blue-600 text-white font-black text-lg py-4 uppercase tracking-widest transition-colors shadow-sm">
+                        Kirim
+                    </button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full bg-slate-950 dark:bg-black text-slate-400 py-12 px-4 border-t-4 border-corporate-blue mt-auto">
+        <div class="max-w-4xl mx-auto text-center flex flex-col items-center">
+            
+            <div class="mb-8">
+                <p class="text-xs md:text-sm leading-relaxed tracking-wider uppercase font-medium text-slate-300 dark:text-neutral-400">
+                    Ruko Paskal Hyper Square Blok no 25 D 12,<br>
+                    Jl. HOS. Cokroaminoto No.25-27, Kb. Jeruk, Kec. Andir,<br>
+                    Kota Bandung, Jawa Barat 40181
+                </p>
+            </div>
+
+            <div class="w-16 h-px bg-slate-800 dark:bg-neutral-800 mb-8"></div>
+
+            <p class="text-xs md:text-sm font-bold text-slate-200 dark:text-neutral-300 tracking-widest uppercase">
+                &copy; 2026 - SYAHRUL ARIFIN by CBN fiber
+            </p>
+        </div>
+    </footer>
+
+    <!-- LOGIKA JAVASCRIPT -->
+    <script>
+        // Dictionary Penerjemah Bahasa (ID & EN)
+        const i18nData = {
+            id: {
+                mainTitle: "Pusat Pemasangan Internet Area Cianjur",
+                subFeatures: "WIFI Tercepat • Harga Termurah • Download & Upload Simetris 1:1 • Support Dual Band 4G & 5G",
+                packageHeading: "Pilihan Layanan Internet CBN",
+                tagInternetOnly: "Internet Only",
+                tagEntertainment: "Paket Hiburan",
+                lblMonthly: "Biaya per bulan",
+                titleBenefits: "Keuntungan Berlangganan",
+                b1: "Gratis Biaya Pasang",
+                b2: "Harga Sudah Termasuk PPN 11%",
+                b3: "Harga Flat / Tidak Naik",
+                b4: "Internet Tanpa FUP / Batas Kuota",
+                titlePromo: "Promo Spesial",
+                p1Title: "BAYAR 5 BULAN",
+                p1Sub: "Gratis 1 Bulan",
+                p2Title: "BAYAR 9 BULAN",
+                p2Sub: "Gratis 3 Bulan",
+                formTitle: "Formulir Pemasangan",
+                formSub: "Lengkapi data pendaftaran di bawah ini. Tim kami akan segera memprosesnya.",
+                lblNama: "Nama Lengkap",
+                lblLayanan: "Pilih Layanan",
+                lblKecamatan: "Kecamatan (Area Cianjur)",
+                lblAlamat: "Detail Alamat Pemasangan",
+                optSelectPackage: "-- PILIH PAKET INTERNET --",
+                optSelectDistrict: "-- PILIH WILAYAH KECAMATAN --",
+                btnSubmit: "Kirim",
+                placeholderNama: "NAMA SESUAI KTP",
+                placeholderAlamat: "NAMA JALAN, RT/RW, BLOK/NOMOR RUMAH..."
+            },
+            en: {
+                mainTitle: "Internet Installation Center - Cianjur Area",
+                subFeatures: "Fastest WIFI • Lowest Price • Symmetric 1:1 Download & Upload • Dual Band 4G & 5G Support",
+                packageHeading: "CBN Internet Service Options",
+                tagInternetOnly: "Internet Only",
+                tagEntertainment: "Entertainment Package",
+                lblMonthly: "Monthly Fee",
+                titleBenefits: "Subscription Benefits",
+                b1: "Free Installation Fee",
+                b2: "Prices Include 11% VAT",
+                b3: "Flat Rate / No Price Increases",
+                b4: "Internet Without FUP / Unlimited Data",
+                titlePromo: "Special Offers",
+                p1Title: "PAY FOR 5 MONTHS",
+                p1Sub: "Get 1 Month Free",
+                p2Title: "PAY FOR 9 MONTHS",
+                p2Sub: "Get 3 Months Free",
+                formTitle: "Installation Form",
+                formSub: "Fill out the registration details below. Our team will process it promptly.",
+                lblNama: "Full Name",
+                lblLayanan: "Select Service",
+                lblKecamatan: "District (Cianjur Area)",
+                lblAlamat: "Installation Address Details",
+                optSelectPackage: "-- SELECT INTERNET PACKAGE --",
+                optSelectDistrict: "-- SELECT DISTRICT AREA --",
+                btnSubmit: "Submit",
+                placeholderNama: "FULL NAME AS PER ID CARD",
+                placeholderAlamat: "STREET NAME, RT/RW, BLOCK/HOUSE NUMBER..."
+            }
+        };
+
+        let currentLang = 'id';
+
+        // Auto-Scroll Slider Otomatis
+        document.addEventListener('DOMContentLoaded', () => {
+            const slider = document.getElementById('packageSlider');
+            if (!slider) return;
+
+            let isPaused = false;
+
+            slider.addEventListener('mouseenter', () => isPaused = true);
+            slider.addEventListener('mouseleave', () => isPaused = false);
+            slider.addEventListener('touchstart', () => isPaused = true, { passive: true });
+            slider.addEventListener('touchend', () => isPaused = false, { passive: true });
+
+            setInterval(() => {
+                if (!isPaused) {
+                    const maxScrollLeft = slider.scrollWidth - slider.clientWidth;
+                    if (slider.scrollLeft >= maxScrollLeft - 10) {
+                        slider.scrollTo({ left: 0, behavior: 'smooth' });
+                    } else {
+                        slider.scrollBy({ left: 320, behavior: 'smooth' });
+                    }
+                }
+            }, 3500);
+        });
+
+        function switchLanguage(lang) {
+            currentLang = lang;
+            
+            // Visual Flag Highlight
+            const btnId = document.getElementById('btn-lang-id');
+            const btnEn = document.getElementById('btn-lang-en');
+
+            if (lang === 'en') {
+                btnEn.classList.remove('opacity-40');
+                btnEn.classList.add('ring-2', 'ring-corporate-blue');
+                btnId.classList.add('opacity-40');
+                btnId.classList.remove('ring-2', 'ring-corporate-blue');
+            } else {
+                btnId.classList.remove('opacity-40');
+                btnId.classList.add('ring-2', 'ring-corporate-blue');
+                btnEn.classList.add('opacity-40');
+                btnEn.classList.remove('ring-2', 'ring-corporate-blue');
+            }
+
+            // Update Text Content
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18nData[lang][key]) {
+                    el.innerText = i18nData[lang][key];
+                }
+            });
+
+            // Update Placeholders
+            document.getElementById('nama').placeholder = i18nData[lang].placeholderNama;
+            document.getElementById('alamat_lengkap').placeholder = i18nData[lang].placeholderAlamat;
+            document.getElementById('btnSubmit').innerText = i18nData[lang].btnSubmit;
+        }
+
+        // Toggle Mode Gelap Pekat (Dark/Light Mode)
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+            } else {
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Form Submission ke WhatsApp (Nomor Disembunyikan dari UI)
+        function kirimWhatsApp(event) {
+            event.preventDefault();
+
+            const nama = document.getElementById('nama').value.trim().toUpperCase();
+            const layanan = document.getElementById('layanan_paket').value;
+            const kecamatan = document.getElementById('kecamatan').value.toUpperCase();
+            const alamat = document.getElementById('alamat_lengkap').value.trim().toUpperCase();
+
+            const noWA = "6285771188235";
+
+            const teksWhatsApp = currentLang === 'en' 
+                ? `Hello Mr. Syahrul, I would like to register for CBN Fiber installation.%0A%0A*APPLICANT DETAILS:*%0A👤 NAME: ${nama}%0A📦 PACKAGE: ${layanan}%0A📍 DISTRICT: ${kecamatan}%0A🏠 ADDRESS: ${alamat}%0A%0APlease assist with the registration process. Thank you.`
+                : `Halo kak Syahrul, saya ingin mendaftar pemasangan CBN Fiber.%0A%0A*DATA PEMOHON:*%0A👤 NAMA: ${nama}%0A📦 PAKET: ${layanan}%0A📍 KECAMATAN: ${kecamatan}%0A🏠 ALAMAT: ${alamat}%0A%0AMohon bantuannya untuk proses pendaftaran. Terima kasih.`;
+
+            const urlWA = `https://wa.me/${noWA}?text=${teksWhatsApp}`;
+            window.open(urlWA, '_blank');
+        }
+    </script>
+</body>
+</html>
